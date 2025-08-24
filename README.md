@@ -49,3 +49,73 @@ The system is designed with four distinct user roles, each with a tailored set o
 - **Fleet & Airport Management:** Add new airplanes and airports to the system to expand the airline's network.
 - **User & Permission Control:** Approve new staff/agent accounts and grant specific operational permissions.
 - **Comprehensive Reporting:** Generate detailed reports on ticket sales, total revenue, and popular destinations to drive business decisions.
+
+air_ticket/
+├── air.sql
+├── config.py
+├── run.py
+├── structure.md
+└── app/
+├── init.py
+├── allfiles.py
+├── models/
+├── routes/
+├── static/
+└── templates/
+
+
+</details>
+
+## 🚀 Getting Started
+
+Follow these instructions to set up and run the project locally.
+
+### Prerequisites
+
+Make sure you have the following installed on your system:
+- Python (3.9+ recommended)
+- MySQL Server
+- Git
+
+### Installation
+
+1.  **Clone the repository:**
+    ```sh
+    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+    cd your-repo-name
+    ```
+
+2.  **Create and activate a Python virtual environment:**
+    ```sh
+    # For macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+
+    # For Windows
+    python -m venv venv
+    .\venv\Scripts\activate
+    ```
+
+3.  **Install the required dependencies:**
+    ```sh
+    pip install -r requirements.txt
+    ```
+    *(Note: If you don't have a `requirements.txt` file, create one with `pip freeze > requirements.txt`)*
+
+4.  **Set up the MySQL Database:**
+    - Start your MySQL server.
+    - Create a new database for the project (e.g., `airline_db`).
+    - Import the database schema and initial data from the `air.sql` file:
+      ```sh
+      mysql -u your_mysql_user -p your_database_name < air.sql
+      ```
+
+5.  **Configure Environment Variables:**
+    - Open the `config.py` file.
+    - Update the database connection settings (username, password, database name) to match your local MySQL setup.
+
+6.  **Run the application:**
+    ```sh
+    python run.py
+    ```
+    The application should now be running at `http://127.0.0.1:5000`.
