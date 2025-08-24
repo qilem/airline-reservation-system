@@ -70,7 +70,7 @@ Make sure you have the following installed on your system:
 
 1.  **Clone the repository:**
     ```sh
-    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+    git clone [https://github.com/qilem/airline-reservation-system.git]
     cd your-repo-name
     ```
 
