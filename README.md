@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
 </p>
 
-A comprehensive, full-stack airline ticketing platform built with Python, Flask, and MySQL. This system features robust role-based access control, real-time flight management, and detailed analytics, catering to customers, booking agents, and airline staff.
+A full-stack airline ticketing platform built with Python, Flask, and MySQL. This system features robust role-based access control, real-time flight management, and detailed analytics, catering to customers, booking agents, and airline staff.
 
 ## Table of Contents
 
