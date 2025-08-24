@@ -1,0 +1,70 @@
+<!-- templates/customer/view_flights.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>My Flights</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Date Range</label>
+                        <select name="range" class="form-control">
+                            <option value="upcoming">Upcoming Flights</option>
+                            <option value="past">Past Flights</option>
+                            <option value="all">All Flights</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Source/Destination</label>
+                        <input type="text" name="airport" class="form-control" placeholder="Airport or City">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if flights %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Airline</th>
+                    <th>Flight</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>{{ flight.airline_name }}</td>
+                    <td>{{ flight.flight_num }}</td>
+                    <td>
+                        {{ flight.departure_airport }}<br>
+                        {{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}
+                    </td>
+                    <td>
+                        {{ flight.arrival_airport }}<br>
+                        {{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}
+                    </td>
+                    <td>{{ flight.status }}</td>
+                    <td>${{ flight.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">No flights found matching your criteria.</div>
+    {% endif %}
+</div>
+{% endblock %}

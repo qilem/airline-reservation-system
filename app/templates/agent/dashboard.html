@@ -1,0 +1,56 @@
+{# agent/dashboard.html #}
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Booking Agent Dashboard</h2>
+
+    {% if error_message %}
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+    {% endif %}
+
+    <!-- Summary Cards -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">30-Day Commission</h5>
+                    <h3 class="card-text">${{ total_commission }}</h3>
+                    <p class="card-text text-muted">Avg per ticket: ${{ avg_commission }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tickets Sold (30 Days)</h5>
+                    <h3 class="card-text">{{ tickets_sold }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Top Customer</h5>
+                    <h3 class="card-text">{{ top_customer.name }}</h3>
+                    <p class="card-text text-muted">{{ top_customer.tickets }} tickets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <a href="{{ url_for('public.search_flights') }}" class="btn btn-primary btn-lg btn-block">Search Flights</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('agent.commission') }}" class="btn btn-success btn-lg btn-block">Commission Report</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('agent.top_customers') }}" class="btn btn-warning btn-lg btn-block">Top Customers</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

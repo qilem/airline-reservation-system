@@ -1,0 +1,69 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Search Flights</h2>
+    <form method="POST" class="mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="source">Source City/Airport</label>
+                    <input type="text" class="form-control" id="source" name="source" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="destination">Destination City/Airport</label>
+                    <input type="text" class="form-control" id="destination" name="destination" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Search</button>
+    </form>
+
+    {% if flights %}
+    <div class="mt-4">
+        <h3>Search Results</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Airline</th>
+                    <th>Flight Number</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    {% if session.get('user') %}
+                    <th>Action</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>{{ flight.airline_name }}</td>
+                    <td>{{ flight.flight_num }}</td>
+                    <td>{{ flight.departure_airport }}<br>{{ flight.departure_time }}</td>
+                    <td>{{ flight.arrival_airport }}<br>{{ flight.arrival_time }}</td>
+                    <td>${{ flight.price }}</td>
+                    <td>{{ flight.status }}</td>
+                    {% if session.get('user') %}
+                    <td>
+                        <a href="{{ url_for('customer.purchase_ticket', flight_num=flight.flight_num, airline_name=flight.airline_name) }}"
+                            class="btn btn-sm btn-success">Book</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

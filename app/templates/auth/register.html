@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" data-bs-toggle="tab" href="#customer">Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" data-bs-toggle="tab" href="#agent">Booking Agent</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" data-bs-toggle="tab" href="#staff">Airline Staff</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <!-- Customer Registration -->
+                    <div class="tab-pane fade show active" id="customer">
+                        <form method="POST" action="{{ url_for('auth.register_customer') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Building Number</label>
+                                    <input type="text" name="building" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Street</label>
+                                    <input type="text" name="street" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">City</label>
+                                    <input type="text" name="city" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">State</label>
+                                    <input type="text" name="state" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" name="phone" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Passport Number</label>
+                                    <input type="text" name="passport" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Passport Expiration</label>
+                                    <input type="date" name="passport_exp" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Passport Country</label>
+                                    <input type="text" name="passport_country" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" required>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100">Register as Customer</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Booking Agent Registration -->
+                    <div class="tab-pane fade" id="agent">
+                        <form method="POST" action="{{ url_for('auth.register_agent') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Booking Agent ID</label>
+                                    <input type="number" name="booking_agent_id" class="form-control" required>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100">Register as Booking Agent</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Airline Staff Registration -->
+                    <div class="tab-pane fade" id="staff">
+                        <form method="POST" action="{{ url_for('auth.register_staff') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" name="username" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" name="first_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" name="last_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" name="date_of_birth" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Airline Name</label>
+                                    <input type="text" name="airline_name" class="form-control" required>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100">Register as Airline Staff</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <p class="mb-0">
+                    Already have an account?
+                    <a href="{{ url_for('auth.login') }}" class="text-primary">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+<!-- templates/customer/track_spending.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Track Spending</h2>
+
+    <!-- Filter Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('customer.spending') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label for="start_date" class="form-label">From Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ request.args.get('start_date', start_date) }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label">To Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ request.args.get('end_date', end_date) }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">View Spending</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Summary and Chart -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Spending</h5>
+                <h3>${{ total_spending or 0 }}</h3> <!-- 防止未定义错误 -->
+                <p class="text-muted">{{ start_date }} - {{ end_date }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Monthly Spending</h5>
+                <canvas id="monthlySpendingChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Monthly spending chart
+    const ctx = document.getElementById('monthlySpendingChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ months|tojson }},
+            datasets: [{
+                label: 'Monthly Spending ($)',
+                data: {{ totals|tojson }},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

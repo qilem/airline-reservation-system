@@ -1,0 +1,88 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Commission Report</h2>
+
+    <!-- Date Range Filter -->
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+            </div>
+            <div class="col-md-4">
+                <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">View Range</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Commission Summary -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Commission</h5>
+                    <h3 class="card-text">${{ total_commission }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Average Commission</h5>
+                    <h3 class="card-text">${{ avg_commission }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tickets Sold</h5>
+                    <h3 class="card-text">{{ tickets_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commission Chart -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <canvas id="commissionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('commissionChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ dates|tojson }},
+            datasets: [{
+                label: 'Daily Commission',
+                data: {{ daily_commission|tojson }},
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Commission ($)'
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

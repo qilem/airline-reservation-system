@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Staff Dashboard - {{ session.get('airline_name') }}</h2>
+
+    <!-- Revenue Summary -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Direct Revenue</h5>
+                    <h3>${{ revenue.direct_revenue or 0 }}</h3>
+                    <p class="text-muted">This Month</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Indirect Revenue</h5>
+                    <h3>${{ revenue.indirect_revenue or 0 }}</h3>
+                    <p class="text-muted">This Month</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Agents</h5>
+                    <h3>{{ pending_agents }}</h3>
+                    {% if pending_agents > 0 and 'Admin' in permissions %}
+                    <a href="{{ url_for('staff.approve_agents') }}" class="btn btn-sm btn-primary">Review</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Staff</h5>
+                    <h3>{{ pending_staff }}</h3>
+                    {% if pending_staff > 0 and 'Admin' in permissions %}
+                    <a href="{{ url_for('staff.approve_staff') }}" class="btn btn-sm btn-primary">Review</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="btn-group">
+                        <a href="{{ url_for('staff.view_flights') }}" class="btn btn-primary">View All Flights</a>
+                        {% if 'Admin' in permissions %}
+                        <a href="{{ url_for('staff.create_flight') }}" class="btn btn-success">Create Flight</a>
+                        <a href="{{ url_for('staff.add_airplane') }}" class="btn btn-info">Add Airplane</a>
+                        <a href="{{ url_for('staff.add_airport') }}" class="btn btn-secondary">Add Airport</a>
+                        {% endif %}
+                        {% if 'Operator' in permissions %}
+                        <a href="{{ url_for('staff.change_status') }}" class="btn btn-warning">Update Status</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Flights -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Upcoming Flights (Next 30 Days)</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight</th>
+                            <th>Route</th>
+                            <th>Schedule</th>
+                            <th>Status</th>
+                            <th>Capacity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for flight in recent_flights %}
+                        <tr>
+                            <td>{{ flight.flight_num }}</td>
+                            <td>
+                                {{ flight.departure_airport }} ({{ flight.departure_city }}) →
+                                {{ flight.arrival_airport }} ({{ flight.arrival_city }})
+                            </td>
+                            <td>{{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if flight.status == 'on-time'
+                                                    else 'warning' if flight.status == 'delayed'
+                                                    else 'danger' }}">
+                                    {{ flight.status }}
+                                </span>
+                            </td>
+                            <td>{{ flight.booked_passengers }}/{{ flight.total_seats }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Destinations -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Top Destinations (Last 3 Months)</h5>
+            <div class="list-group">
+                {% for dest in top_destinations %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ dest.airport_city }} ({{ dest.arrival_airport }})
+                    <span class="badge bg-primary rounded-pill">{{ dest.frequency }} bookings</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

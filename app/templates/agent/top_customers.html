@@ -1,0 +1,116 @@
+
+
+{# agent/top_customers.html #}
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Top Customers</h2>
+
+    <div class="row">
+        <!-- Tickets Based Ranking -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Top 5 by Tickets (Last 6 Months)</h5>
+                    <canvas id="ticketsChart"></canvas>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Tickets</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in top_by_tickets %}
+                                <tr>
+                                    <td>{{ customer.email }}</td>
+                                    <td>{{ customer.tickets }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commission Based Ranking -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Top 5 by Commission (Last Year)</h5>
+                    <canvas id="commissionChart"></canvas>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in top_by_commission %}
+                                <tr>
+                                    <td>{{ customer.email }}</td>
+                                    <td>${{ customer.commission }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Tickets Chart
+    new Chart(document.getElementById('ticketsChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: {{ ticket_customers|tojson }},
+            datasets: [{
+                label: 'Tickets Purchased',
+                data: {{ ticket_counts|tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Commission Chart
+    new Chart(document.getElementById('commissionChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: {{ commission_customers|tojson }},
+            datasets: [{
+                label: 'Commission Earned ($)',
+                data: {{ commission_amounts|tojson }},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

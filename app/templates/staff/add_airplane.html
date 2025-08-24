@@ -1,0 +1,52 @@
+<!-- staff/add_airplane.html -->
+{% extends "base.html" %}
+
+{% block title %}Add New Airplane{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4 text-center">Add New Airplane</h2>
+
+            <!-- Error Alert -->
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <!-- Add Airplane Form -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('staff.add_airplane') }}">
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <!-- Airplane ID Input -->
+                        <div class="mb-3">
+                            <label for="airplane_id" class="form-label">Airplane ID</label>
+                            <input type="number" id="airplane_id" name="airplane_id" class="form-control" required>
+                            <div class="form-text">Must be unique within your airline.</div>
+                        </div>
+
+                        <!-- Seats Input -->
+                        <div class="mb-3">
+                            <label for="seats" class="form-label">Number of Seats</label>
+                            <input type="number" id="seats" name="seats" class="form-control" required>
+                            <div class="form-text">Specify the total passenger capacity.</div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Add Airplane</button>
+                            <a href="{{ url_for('staff.view_airplanes') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Purchase Ticket</h2>
+
+    {% if error %}
+    <div class="alert alert-danger mb-4">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if flight %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Flight Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Airline:</strong> {{ flight.airline_name }}</p>
+                    <p><strong>Flight Number:</strong> {{ flight.flight_num }}</p>
+                    <p><strong>Price:</strong> ${{ flight.price }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Departure:</strong> {{ flight.departure_airport }} at {{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p><strong>Arrival:</strong> {{ flight.arrival_airport }} at {{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p><strong>Status:</strong> {{ flight.status }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="card">
+            <div class="card-body">
+                <h5>Confirm Purchase</h5>
+                <p>Please review the flight details above and confirm your purchase.</p>
+                <button type="submit" class="btn btn-success">Purchase Ticket</button>
+                <a href="{{ url_for('public.search_flights') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <div class="card">
+        <div class="card-body">
+            <p>Unable to load flight details.</p>
+            <a href="{{ url_for('public.search_flights') }}" class="btn btn-primary">Return to Search</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

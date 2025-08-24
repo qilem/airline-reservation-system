@@ -1,0 +1,122 @@
+<!-- templates/public/search_results.html -->
+{% extends "base.html" %}
+
+{% block title %}Flight Search Results{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Search Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Search Flights</h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('public.search_flights') }}" class="row g-3">
+                <div class="col-md-3">
+                    <label for="source" class="form-label">From</label>
+                    <input type="text" class="form-control" id="source" name="source"
+                           value="{{ source }}" placeholder="City or Airport">
+                </div>
+                <div class="col-md-3">
+                    <label for="destination" class="form-label">To</label>
+                    <input type="text" class="form-control" id="destination" name="destination"
+                           value="{{ destination }}" placeholder="City or Airport">
+                </div>
+                <div class="col-md-3">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date"
+                           value="{{ start_date }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date"
+                           value="{{ end_date }}">
+                </div>
+                <div class="col-md-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Available Flights</h5>
+            {% if flights %}
+            <span class="badge bg-light text-dark">{{ flights|length }} flights found</span>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% elif not flights %}
+                <div class="alert alert-info">
+                    No flights found matching your criteria. Please try again with different filters.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Airline</th>
+                                <th>Flight</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for flight in flights %}
+                            <tr>
+                                <td>{{ flight.airline }}</td>
+                                <td>{{ flight.flight_number }}</td>
+                                <td>
+                                    <div>{{ flight.departure_city }} ({{ flight.departure_airport }})</div>
+                                    <small class="text-muted">{{ flight.departure_time }}</small>
+                                </td>
+                                <td>
+                                    <div>{{ flight.arrival_city }} ({{ flight.arrival_airport }})</div>
+                                    <small class="text-muted">{{ flight.arrival_time }}</small>
+                                </td>
+                                <td>${{ "%.2f"|format(flight.price) }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if flight.status == 'On Time'
+                                        else 'warning' if flight.status == 'Delayed'
+                                        else 'danger' }} text-white">
+                                        {{ flight.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if session.get('user') %}
+                                        {% if session.get('user_type') == 'customer' %}
+                                            <!-- Customer直接预订票 -->
+                                            <a href="{{ url_for('customer.purchase_ticket',
+                                                                 airline_name=flight.airline,
+                                                                 flight_num=flight.flight_number) }}"
+                                               class="btn btn-sm btn-primary">Book</a>
+                                        {% elif session.get('user_type') == 'agent' %}
+                                            <!-- Booking Agent帮客户预订票 -->
+                                            <a href="{{ url_for('agent.book_ticket_for_customer',
+                                                                 airline_name=flight.airline,
+                                                                 flight_num=flight.flight_number) }}"
+                                               class="btn btn-sm btn-success">Book for Customer</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <!-- 未登录用户 -->
+                                        <a href="{{ url_for('auth.login') }}"
+                                           class="btn btn-sm btn-secondary">Login to Book</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

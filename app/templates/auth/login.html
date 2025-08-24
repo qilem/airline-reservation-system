@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header text-center bg-primary text-white">
+                <h3>Login</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <!-- User Type Selection -->
+                    <div class="mb-3">
+                        <label for="userType" class="form-label">User Type</label>
+                        <select class="form-select" id="userType" name="user_type" required>
+                            <option value="customer" {% if request.form.get('user_type') == 'customer' %}selected{% endif %}>Customer</option>
+                            <option value="agent" {% if request.form.get('user_type') == 'agent' %}selected{% endif %}>Booking Agent</option>
+                            <option value="staff" {% if request.form.get('user_type') == 'staff' %}selected{% endif %}>Airline Staff</option>
+                        </select>
+                    </div>
+
+                    <!-- Username/Email Input -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Email/Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your email or username" required>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer text-center">
+                <p class="mb-0">
+                    Don't have an account?
+                    <a href="{{ url_for('auth.register') }}" class="text-primary">Register here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

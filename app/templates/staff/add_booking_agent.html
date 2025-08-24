@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Add Booking Agent</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                {% if available_agents %}
+                <div class="mb-3">
+                    <label class="form-label">Select Booking Agent</label>
+                    <select name="email" class="form-select" required>
+                        <option value="">Choose an agent...</option>
+                        {% for agent in available_agents %}
+                        <option value="{{ agent.email }}">
+                            {{ agent.email }} (ID: {{ agent.booking_agent_id }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Agent</button>
+                <a href="{{ url_for('staff.view_agents') }}" class="btn btn-secondary">Cancel</a>
+                {% else %}
+                <div class="alert alert-info">
+                    No new booking agents available to add at this time.
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Currently Working Agents</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">To see current agents and their performance, visit the 
+                    <a href="{{ url_for('staff.view_agents') }}">View Agents</a> page.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

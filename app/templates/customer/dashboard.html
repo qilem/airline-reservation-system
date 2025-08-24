@@ -1,0 +1,57 @@
+<!-- templates/customer/dashboard.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Welcome, {{ session.get('user')['name'] }}</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Upcoming Flights</h5>
+                    {% if upcoming_flights %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Flight</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flight in upcoming_flights %}
+                                <tr>
+                                    <td>{{ flight.airline_name }} {{ flight.flight_num }}</td>
+                                    <td>{{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>{{ flight.status }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p>No upcoming flights.</p>
+                    {% endif %}
+                    <a href="{{ url_for('customer.my_flights') }}" class="btn btn-primary mt-3">View All Flights</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Spending</h5>
+                    {% if spending_data %}
+                    <canvas id="spendingChart"></canvas>
+                    {% else %}
+                    <p>No spending data available.</p>
+                    {% endif %}
+                    <a href="{{ url_for('customer.spending') }}" class="btn btn-primary mt-3">View Full Spending</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

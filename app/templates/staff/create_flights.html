@@ -1,0 +1,65 @@
+<!-- staff/create_flight.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2>Create New Flight</h2>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Flight Number</label>
+                    <input type="number" name="flight_num" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Airplane</label>
+                    <select name="airplane_id" class="form-select" required>
+                        {% for airplane in airplanes %}
+                        <option value="{{ airplane.airplane_id }}">ID: {{ airplane.airplane_id }} ({{ airplane.seats }} seats)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Departure Airport</label>
+                    <select name="departure_airport" class="form-select" required>
+                        {% for airport in airports %}
+                        <option value="{{ airport.airport_name }}">{{ airport.airport_name }} ({{ airport.airport_city }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Arrival Airport</label>
+                    <select name="arrival_airport" class="form-select" required>
+                        {% for airport in airports %}
+                        <option value="{{ airport.airport_name }}">{{ airport.airport_name }} ({{ airport.airport_city }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Departure Time</label>
+                    <input type="datetime-local" name="departure_time" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Arrival Time</label>
+                    <input type="datetime-local" name="arrival_time" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Base Price</label>
+                    <input type="number" name="price" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="on-time">On Time</option>
+                        <option value="delayed">Delayed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Create Flight</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

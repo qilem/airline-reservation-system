@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}View Customers{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Customer Information</h2>
+
+    <!-- Most Frequent Customer Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5>Most Frequent Customer</h5>
+        </div>
+        <div class="card-body">
+            {% if frequent_customer %}
+            <p><strong>Email:</strong> {{ frequent_customer.email }}</p>
+            <p><strong>Name:</strong> {{ frequent_customer.name }}</p>
+            <p><strong>Flights Count:</strong> {{ frequent_customer.flights_count }}</p>
+            {% else %}
+            <p>No data available for most frequent customer.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5>Search Customer Flight History</h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-8">
+                    <input type="email" name="customer_email" class="form-control" placeholder="Enter customer email" value="{{ request.args.get('customer_email', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Customer Flight History -->
+    {% if customer_flights %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Purchase Date</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in customer_flights %}
+                <tr>
+                    <td>{{ flight.flight_num }}</td>
+                    <td>
+                        {{ flight.departure_city }} ({{ flight.departure_airport }})<br>
+                        {{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}
+                    </td>
+                    <td>
+                        {{ flight.arrival_city }} ({{ flight.arrival_airport }})<br>
+                        {{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}
+                    </td>
+                    <td>{{ flight.purchase_date.strftime('%Y-%m-%d') }}</td>
+                    <td>${{ "%.2f"|format(flight.price) }}</td>
+                    <td>{{ flight.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">No flight history available for the selected customer.</div>
+    {% endif %}
+</div>
+{% endblock %}

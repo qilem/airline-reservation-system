@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Top Booking Agents</h2>
+
+    <div class="row mt-4">
+        <!-- Monthly Ticket Sales -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top 5 by Monthly Ticket Sales</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Agent</th>
+                                <th>Tickets</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agent in top_monthly_sales %}
+                            <tr>
+                                <td>{{ agent.rank_num }}</td>
+                                <td>{{ agent.email }}</td>
+                                <td>{{ agent.ticket_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yearly Ticket Sales -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top 5 by Yearly Ticket Sales</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Agent</th>
+                                <th>Tickets</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agent in top_yearly_sales %}
+                            <tr>
+                                <td>{{ agent.rank_num }}</td>
+                                <td>{{ agent.email }}</td>
+                                <td>{{ agent.ticket_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yearly Commission -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top 5 by Yearly Commission</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Agent</th>
+                                <th>Commission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agent in top_yearly_commission %}
+                            <tr>
+                                <td>{{ agent.rank_num }}</td>
+                                <td>{{ agent.email }}</td>
+                                <td>${{ "%.2f"|format(agent.commission or 0) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

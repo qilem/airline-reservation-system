@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Flight Status{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Status Search Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Check Flight Status</h4>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('public.flight_status') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label for="airline" class="form-label">Airline</label>
+                    <input type="text" class="form-control" id="airline" name="airline"
+                           value="{{ airline }}" placeholder="Airline Name">
+                </div>
+                <div class="col-md-4">
+                    <label for="flight_num" class="form-label">Flight Number</label>
+                    <input type="text" class="form-control" id="flight_num" name="flight_num"
+                           value="{{ flight_num }}" placeholder="Flight Number">
+                </div>
+                <div class="col-md-4">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date"
+                           value="{{ date }}">
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4">Check Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Status Results -->
+    {% if flight_num or airline or date %}
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Flight Status Results</h5>
+        </div>
+        <div class="card-body">
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% elif not flights %}
+                <div class="alert alert-info">No flights found matching your criteria.</div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Airline</th>
+                                <th>Flight</th>
+                                <th>Route</th>
+                                <th>Scheduled Time</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for flight in flights %}
+                            <tr>
+                                <td>{{ flight.airline }}</td>
+                                <td>{{ flight.flight_number }}</td>
+                                <td>
+                                    {{ flight.departure_city }} ({{ flight.departure_airport }})
+                                    →
+                                    {{ flight.arrival_city }} ({{ flight.arrival_airport }})
+                                </td>
+                                <td>
+                                    <div>Dep: {{ flight.scheduled_departure }}</div>
+                                    <div>Arr: {{ flight.scheduled_arrival }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if flight.status == 'On Time'
+                                        else 'warning' if flight.status == 'Delayed'
+                                        else 'danger' }}">
+                                        {{ flight.status }}
+                                    </span>
+                                </td>
+                                <td>{{ flight.status_time }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Airports autocomplete for future use
+    $('#source, #destination').autocomplete({
+        source: function(request, response) {
+            $.getJSON("{{ url_for('public.search_airports') }}", {
+                term: request.term
+            }, response);
+        },
+        minLength: 2
+    });
+});
+</script>
+{% endblock %}

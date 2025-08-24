@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+   <h2>My Flight Bookings</h2>
+
+   <div class="card mb-4">
+       <div class="card-body">
+           <form method="GET" class="row">
+               <div class="col-md-3">
+                   <div class="form-group">
+                       <label>Source City/Airport</label>
+                       <input type="text" name="source" class="form-control" value="{{ source }}" placeholder="City or Airport">
+                   </div>
+               </div>
+               <div class="col-md-3">
+                   <div class="form-group">
+                       <label>Destination City/Airport</label>
+                       <input type="text" name="destination" class="form-control" value="{{ destination }}" placeholder="City or Airport">
+                   </div>
+               </div>
+               <div class="col-md-2">
+                   <div class="form-group">
+                       <label>Start Date</label>
+                       <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+                   </div>
+               </div>
+               <div class="col-md-2">
+                   <div class="form-group">
+                       <label>End Date</label>
+                       <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+                   </div>
+               </div>
+               <div class="col-md-2">
+                   <button type="submit" class="btn btn-primary mt-4">Search Flights</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <div class="card">
+       <div class="card-body">
+           <div class="table-responsive">
+               <table class="table table-hover">
+                   <thead>
+                       <tr>
+                           <th>Flight</th>
+                           <th>Departure</th>
+                           <th>Arrival</th>
+                           <th>Customer</th>
+                           <th>Status</th>
+                           <th>Price</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       {% for flight in flights %}
+                       <tr>
+                           <td>{{ flight.airline_name }} {{ flight.flight_num }}</td>
+                           <td>
+                               {{ flight.departure_airport }} ({{ flight.departure_city }})<br>
+                               <small>{{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                           </td>
+                           <td>
+                               {{ flight.arrival_airport }} ({{ flight.arrival_city }})<br>
+                               <small>{{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                           </td>
+                           <td>
+                               {{ flight.customer_name }}<br>
+                               <small>{{ flight.customer_email }}</small>
+                           </td>
+                           <td>
+                               <span class="badge bg-{{ 'success' if flight.status == 'on-time' else 'warning' if flight.status == 'delayed' else 'danger' }}">
+                                   {{ flight.status }}
+                               </span>
+                           </td>
+                           <td>${{ flight.price }}</td>
+                       </tr>
+                       {% endfor %}
+                   </tbody>
+               </table>
+
+               {% if not flights %}
+               <p class="text-center text-muted my-4">No flights found matching your criteria.</p>
+               {% endif %}
+           </div>
+       </div>
+   </div>
+</div>
+{% endblock %}

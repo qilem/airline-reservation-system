@@ -1,0 +1,88 @@
+<!-- staff/view_flights.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2>Flight Management</h2>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Date Range</label>
+                <input type="date" name="start_date" class="form-control" value="{{ request.args.get('start_date', '') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">To</label>
+                <input type="date" name="end_date" class="form-control" value="{{ request.args.get('end_date', '') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Source</label>
+                <input type="text" name="source" class="form-control" value="{{ request.args.get('source', '') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Destination</label>
+                <input type="text" name="destination" class="form-control" value="{{ request.args.get('destination', '') }}">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive mt-3">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Flight #</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Status</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight.flight_num }}</td>
+                <td>{{ flight.departure_airport }} ({{ flight.departure_time }})</td>
+                <td>{{ flight.arrival_airport }} ({{ flight.arrival_time }})</td>
+                <td>{{ flight.status }}</td>
+                <td>${{ flight.price }}</td>
+                <td>
+                    <a href="{{ url_for('staff.view_flights', flight_num=flight.flight_num) }}" class="btn btn-sm btn-info">View Details</a>
+                    {% if 'Operator' in staff.permissions %}
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#statusModal{{ flight.flight_num }}">Change Status</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% for flight in flights %}
+<div class="modal fade" id="statusModal{{ flight.flight_num }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Flight Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('staff.change_status', flight_num=flight.flight_num) }}">
+                    <div class="mb-3">
+                        <label class="form-label">New Status</label>
+                        <select name="status" class="form-select">
+                            <option value="on-time">On Time</option>
+                            <option value="delayed">Delayed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

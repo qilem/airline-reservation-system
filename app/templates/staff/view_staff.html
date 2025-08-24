@@ -1,0 +1,43 @@
+{% extends "/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Staff List - {{ session['airline_name'] }}</h2>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Permissions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in staff_list %}
+                    <tr>
+                        <td>{{ staff.username }}</td>
+                        <td>{{ staff.first_name }} {{ staff.last_name }}</td>
+                        <td>{{ staff.date_of_birth.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ staff.permissions or 'No permissions' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+// 简单的权限检查
+fetch('/staff/view_staff')
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        }
+    });
+</script>
+{% endblock %}

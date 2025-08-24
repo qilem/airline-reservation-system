@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Grant Staff Permissions</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Staff Member</label>
+                    <select name="username" class="form-select" required>
+                        <option value="">Select staff member...</option>
+                        {% for staff in staff_members %}
+                        <option value="{{ staff.username }}">
+                            {{ staff.first_name }} {{ staff.last_name }} 
+                            {% if staff.current_permissions %}
+                            (Current: {{ staff.current_permissions }})
+                            {% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Permission Type</label>
+                    <select name="permission_type" class="form-select" required>
+                        <option value="Admin">Admin</option>
+                        <option value="Operator">Operator</option>
+                    </select>
+                    <div class="form-text">
+                        Admin: Can manage flights, airplanes, and other staff<br>
+                        Operator: Can update flight statuses
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Grant Permission</button>
+                <a href="{{ url_for('staff.dashboard') }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Permission Levels Explained</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <strong>Admin</strong>
+                        <ul>
+                            <li>Create new flights</li>
+                            <li>Add new airplanes</li>
+                            <li>Add new airports</li>
+                            <li>Manage booking agents</li>
+                            <li>Grant permissions to other staff</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Operator</strong>
+                        <ul>
+                            <li>Update flight statuses</li>
+                            <li>View all airline data</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

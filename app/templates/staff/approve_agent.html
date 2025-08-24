@@ -1,0 +1,50 @@
+<!-- templates/staff/approve_agents.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+   <h2>Approve Booking Agents</h2>
+
+   <div class="card">
+       <div class="card-body">
+           {% if agents %}
+           <form method="POST">
+               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+               <table class="table">
+                   <thead>
+                       <tr>
+                           <th><input type="checkbox" id="select-all"></th>
+                           <th>Agent ID</th>
+                           <th>Email</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       {% for agent in agents %}
+                       <tr>
+                           <td><input type="checkbox" name="agent_emails" value="{{ agent.email }}"></td>
+                           <td>{{ agent.booking_agent_id }}</td>
+                           <td>{{ agent.email }}</td>
+                       </tr>
+                       {% endfor %}
+                   </tbody>
+               </table>
+
+               <button type="submit" class="btn btn-primary">Approve Selected</button>
+           </form>
+           {% else %}
+           <p class="text-center text-muted my-4">No pending agents to approve.</p>
+           {% endif %}
+       </div>
+   </div>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('select-all').onchange = function() {
+   var checkboxes = document.getElementsByName('agent_emails');  // 改为agent_emails
+   for(var checkbox of checkboxes) {
+       checkbox.checked = this.checked;
+   }
+}
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,267 @@
+<!-- templates/public/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Welcome - Air Ticket Reservation System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="container">
+    <div class="row align-items-center py-5">
+        <div class="col-lg-6 text-center text-lg-start">
+            <h1 class="display-4 fw-bold text-primary">Discover Your Next Adventure</h1>
+            <p class="lead text-muted mb-4">Plan, search, and book flights seamlessly with our all-in-one platform.</p>
+            {% if not session.get('user') %}
+                <div class="d-flex justify-content-center justify-content-lg-start gap-3">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Register Now</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-6">
+            <!-- Quick Search Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-primary text-white text-center">
+                    <h5 class="mb-0 text-dark">Find Your Flight</h5>
+                </div>
+                <div class="card-body">
+                    <form method="GET" action="{{ url_for('public.search_flights') }}">
+                        <div class="row gy-3">
+                            <div class="col-md-6">
+                                <label for="source" class="form-label">Source</label>
+                                <input type="text" id="source" name="source" class="form-control" placeholder="City or Airport">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="destination" class="form-label">Destination</label>
+                                <input type="text" id="destination" name="destination" class="form-control" placeholder="City or Airport">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" id="start_date" name="start_date" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" id="end_date" name="end_date" class="form-control">
+                            </div>
+                            <div class="col-md-12 d-flex justify-content-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">Search Flights</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Features Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-search fs-1 text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Search Flights</h5>
+                        <p class="card-text">Find the best flights with our easy-to-use search system. Compare prices and schedules.</p>
+                        <a href="{{ url_for('public.search_flights') }}" class="btn btn-outline-primary">Search Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-clock-history fs-1 text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Flight Status</h5>
+                        <p class="card-text">Check your flight status in real-time. Get updates on delays and gate changes.</p>
+                        <a href="{{ url_for('public.flight_status') }}" class="btn btn-outline-primary">Check Status</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-person-circle fs-1 text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Manage</h5>
+
+                        {% if session.get('user') %}
+                            {% if session.get('user_type') == 'customer' %}
+                                <p class="card-text">View your bookings, track spending, and manage your travel plans.</p>
+                                <a href="{{ url_for('customer.dashboard') }}" class="btn btn-outline-primary">My Account</a>
+                            {% elif session.get('user_type') == 'agent' %}
+                                <p class="card-text">View your bookings, track spending, and manage your travel plans.</p>
+                                <a href="{{ url_for('agent.dashboard') }}" class="btn btn-outline-primary">Agent Portal</a>
+                            {% elif session.get('user_type') == 'staff' %}
+                                <p class="card-text">Manage Everything .</p>
+                                <a href="{{ url_for('staff.dashboard') }}" class="btn btn-outline-primary">Staff Portal</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary">Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Section -->
+{% if session.get('user') %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Quick Access</h2>
+    <div class="row g-4">
+        {% if session.get('user_type') == 'customer' %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">My Flights</h5>
+                        <p class="card-text">View your upcoming flights and travel history.</p>
+                        <a href="{{ url_for('customer.my_flights') }}" class="btn btn-primary">View Flights</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">My Spending</h5>
+                        <p class="card-text">Track your travel expenses and view spending history.</p>
+                        <a href="{{ url_for('customer.spending') }}" class="btn btn-primary">View Spending</a>
+                    </div>
+                </div>
+            </div>
+        {% elif session.get('user_type') == 'agent' %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Commission Overview</h5>
+                        <p class="card-text">View your commission statistics and earnings.</p>
+                        <a href="{{ url_for('agent.commission') }}" class="btn btn-primary">View Commission</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Customers</h5>
+                        <p class="card-text">View your top performing customers and sales data.</p>
+                        <a href="{{ url_for('agent.top_customers') }}" class="btn btn-primary">View Customers</a>
+                    </div>
+                </div>
+            </div>
+        {% elif session.get('user_type') == 'staff' %}
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Flight Management -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-primary">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-airplane-fill text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Flight Management</h5>
+                    <p class="card-text">Manage flights and update flight status.</p>
+                    <a href="{{ url_for('staff.view_flights') }}" class="btn btn-outline-primary">Manage Flights</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-bar-chart-line-fill text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Reports</h5>
+                    <p class="card-text">View sales reports and revenue analysis.</p>
+                    <a href="{{ url_for('staff.view_reports') }}" class="btn btn-outline-success">View Reports</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Customers -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-warning">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-people-fill text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Top Customers</h5>
+                    <p class="card-text">View your top performing customers and sales data.</p>
+                    <a href="{{ url_for('staff.view_customers') }}" class="btn btn-outline-warning">View Customers</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Agents -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-badge-fill text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Agents</h5>
+                    <p class="card-text">View your top agents and their performance data.</p>
+                    <a href="{{ url_for('staff.view_agents') }}" class="btn btn-outline-info">View Agents</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-info">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-people-fill text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">View Staff</h5>
+                    <p class="card-text">View your Staff.</p>
+                    <a href="{{ url_for('staff.view_staff') }}" class="btn btn-outline-primary">View Staff</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100 border-primary">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-people-fill text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">View airplanes</h5>
+                    <p class="card-text">View your airplanes.</p>
+                    <a href="{{ url_for('staff.view_airplanes') }}" class="btn btn-outline-info">View airplanes</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endif %}
+
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Set minimum date for flight search to today
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').min = today;
+
+    // Airports autocomplete
+    $('#source, #destination').autocomplete({
+        source: function(request, response) {
+            $.getJSON("{{ url_for('public.search_airports') }}", {
+                term: request.term
+            }, response);
+        },
+        minLength: 2
+    });
+});
+</script>
+{% endblock %}

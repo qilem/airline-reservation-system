@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Add New Airport</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label class="form-label">Airport Code</label>
+                    <input type="text" name="airport_name" class="form-control" required 
+                           pattern="[A-Z]{3}" title="Three uppercase letters">
+                    <div class="form-text">Three letter IATA code (e.g., JFK, LAX)</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">City</label>
+                    <input type="text" name="airport_city" class="form-control" required>
+                    <div class="form-text">City where the airport is located</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Airport</button>
+                <a href="{{ url_for('staff.dashboard') }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

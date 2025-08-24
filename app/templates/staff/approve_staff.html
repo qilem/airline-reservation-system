@@ -1,0 +1,52 @@
+<!-- templates/staff/approve_staff.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+   <h2>Approve Airline Staff</h2>
+
+   <div class="card">
+       <div class="card-body">
+           {% if staff %}
+           <form method="POST">
+               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+               <table class="table">
+                   <thead>
+                       <tr>
+                           <th><input type="checkbox" id="select-all"></th>
+                           <th>Username</th>
+                           <th>Name</th>
+                           <th>Airline</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       {% for member in staff %}
+                       <tr>
+                           <td><input type="checkbox" name="usernames" value="{{ member.username }}"></td>
+                           <td>{{ member.username }}</td>
+                           <td>{{ member.first_name }} {{ member.last_name }}</td>
+                           <td>{{ member.airline_name }}</td>
+                       </tr>
+                       {% endfor %}
+                   </tbody>
+               </table>
+
+               <button type="submit" class="btn btn-primary">Approve Selected</button>
+           </form>
+           {% else %}
+           <p class="text-center text-muted my-4">No pending staff members to approve.</p>
+           {% endif %}
+       </div>
+   </div>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('select-all').onchange = function() {
+   var checkboxes = document.getElementsByName('usernames');
+   for(var checkbox of checkboxes) {
+       checkbox.checked = this.checked;
+   }
+}
+</script>
+{% endblock %}
+{% endblock %}
