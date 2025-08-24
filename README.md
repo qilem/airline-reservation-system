@@ -50,18 +50,7 @@ The system is designed with four distinct user roles, each with a tailored set o
 - **User & Permission Control:** Approve new staff/agent accounts and grant specific operational permissions.
 - **Comprehensive Reporting:** Generate detailed reports on ticket sales, total revenue, and popular destinations to drive business decisions.
 
-air_ticket/
-├── air.sql
-├── config.py
-├── run.py
-├── structure.md
-└── app/
-├── init.py
-├── allfiles.py
-├── models/
-├── routes/
-├── static/
-└── templates/
+
 
 
 </details>
@@ -96,13 +85,7 @@ Make sure you have the following installed on your system:
     .\venv\Scripts\activate
     ```
 
-3.  **Install the required dependencies:**
-    ```sh
-    pip install -r requirements.txt
-    ```
-    *(Note: If you don't have a `requirements.txt` file, create one with `pip freeze > requirements.txt`)*
-
-4.  **Set up the MySQL Database:**
+3.  **Set up the MySQL Database:**
     - Start your MySQL server.
     - Create a new database for the project (e.g., `airline_db`).
     - Import the database schema and initial data from the `air.sql` file:
@@ -110,11 +93,11 @@ Make sure you have the following installed on your system:
       mysql -u your_mysql_user -p your_database_name < air.sql
       ```
 
-5.  **Configure Environment Variables:**
+4.  **Configure Environment Variables:**
     - Open the `config.py` file.
     - Update the database connection settings (username, password, database name) to match your local MySQL setup.
 
-6.  **Run the application:**
+5.  **Run the application:**
     ```sh
     python run.py
     ```
