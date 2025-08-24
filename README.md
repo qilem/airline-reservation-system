@@ -102,3 +102,14 @@ Make sure you have the following installed on your system:
     python run.py
     ```
     The application should now be running at `http://127.0.0.1:5000`.
+
+
+<img width="2480" height="1203" alt="屏幕截图 2025-08-24 090447" src="https://github.com/user-attachments/assets/dc473658-709c-4201-acb3-54a1afd0b1b0" />
+<img width="2472" height="1203" alt="屏幕截图 2025-08-24 090945" src="https://github.com/user-attachments/assets/0c41f111-4a2d-41c0-82af-3415d51a5ac6" />
+<img width="2471" height="1189" alt="屏幕截图 2025-08-24 092206" src="https://github.com/user-attachments/assets/9fa999ea-b45e-4bf7-8938-a72b729001e1" />
+<img width="2477" height="1191" alt="屏幕截图 2025-08-24 092406" src="https://github.com/user-attachments/assets/ed42ec88-faad-4c72-b0bc-261fb563947e" />
+
+
+
+
+
