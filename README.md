@@ -71,7 +71,7 @@ Make sure you have the following installed on your system:
 1.  **Clone the repository:**
     ```sh
     git clone [https://github.com/qilem/airline-reservation-system.git]
-    cd your-repo-name
+    cd airline-reservation-system
     ```
 
 2.  **Create and activate a Python virtual environment:**
